@@ -199,8 +199,8 @@ const LoginForm = ({ onLogin }) => {
           <div className="logo-container">
             <img 
               ref={imageRef}
-              src={`${import.meta.env.BASE_URL}assets/login.png`}
-              alt="Renewable Energy" 
+              src="https://mlkd.aut.ac.ir/2024/wp-content/uploads/2024/04/Aut-Logo.png"
+              alt="AUT University Logo" 
               className="login-image"
             />
             <div className="header-text">
