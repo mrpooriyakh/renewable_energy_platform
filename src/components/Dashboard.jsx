@@ -347,7 +347,7 @@ const Dashboard = ({ user, onLogout }) => {
       <main className="dashboard-main">
         <div className="welcome-section" ref={welcomeRef}>
           <h2>Welcome to Your Learning Dashboard</h2>
-          <p>Select a renewable energy topic to begin learning</p>
+          <p>Explore 5 renewable energy technologies: Solar PV, Wind Power, Hydropower, Geothermal, and Solar Thermal</p>
         </div>
         
         <div className="energy-modules">
