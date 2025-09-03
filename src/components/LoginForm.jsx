@@ -199,7 +199,7 @@ const LoginForm = ({ onLogin }) => {
           <div className="logo-container">
             <img 
               ref={imageRef}
-              src="/assets/login.png" 
+              src={`${import.meta.env.BASE_URL}assets/login.png`}
               alt="Renewable Energy" 
               className="login-image"
             />
