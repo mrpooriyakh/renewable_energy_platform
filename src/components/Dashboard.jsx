@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import './Dashboard.css'
 
 const Dashboard = ({ user, onLogout }) => {
   const [isSolarExpanded, setIsSolarExpanded] = useState(false)
   const [activeSubSection, setActiveSubSection] = useState('videos')
+  const navigate = useNavigate()
   const welcomeRef = useRef(null)
   const solarBoxRef = useRef(null)
   const solarContentRef = useRef(null)
   const networkRef = useRef(null)
+
+  const handleLogout = () => {
+    onLogout()
+    navigate('/')
+  }
 
   useEffect(() => {
     // Initial animations
@@ -120,7 +127,7 @@ const Dashboard = ({ user, onLogout }) => {
           </div>
           <div className="user-info">
             <span>Welcome, {user.name}</span>
-            <button onClick={onLogout} className="logout-button">Logout</button>
+            <button onClick={handleLogout} className="logout-button">Logout</button>
           </div>
         </div>
       </header>

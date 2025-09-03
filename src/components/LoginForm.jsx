@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import './LoginForm.css'
 
@@ -7,6 +8,7 @@ const LoginForm = ({ onLogin }) => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
   
   const containerRef = useRef(null)
   const cardRef = useRef(null)
@@ -154,6 +156,7 @@ const LoginForm = ({ onLogin }) => {
           repeat: 1,
           onComplete: () => {
             onLogin({ studentId, name: 'Administrator' })
+            navigate('/main-dashboard')
             setIsLoading(false)
           }
         })
