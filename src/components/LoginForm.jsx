@@ -146,7 +146,24 @@ const LoginForm = ({ onLogin }) => {
       repeat: 1
     })
 
+    // Check credentials and determine user role
+    let userData = null;
+    
     if (studentId === 'admin' && password === 'admin') {
+      userData = { 
+        studentId, 
+        name: 'Student User',
+        role: 'student'
+      }
+    } else if (studentId === 'admin1' && password === 'admin1') {
+      userData = { 
+        studentId, 
+        name: 'Professor Smith',
+        role: 'admin'
+      }
+    }
+
+    if (userData) {
       setTimeout(() => {
         // Success animation
         gsap.to(cardRef.current, {
@@ -155,7 +172,7 @@ const LoginForm = ({ onLogin }) => {
           yoyo: true,
           repeat: 1,
           onComplete: () => {
-            onLogin({ studentId, name: 'Administrator' })
+            onLogin(userData)
             navigate('/main-dashboard')
             setIsLoading(false)
           }
@@ -253,7 +270,7 @@ const LoginForm = ({ onLogin }) => {
         </form>
         
         <div className="login-footer" ref={footerRef}>
-          <p>For testing: ID: admin, Password: admin</p>
+          <p>Student: admin/admin | Teacher: admin1/admin1</p>
         </div>
       </div>
     </div>

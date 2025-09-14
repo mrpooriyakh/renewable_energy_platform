@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import './App.css'
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <div className="app">
-      <Router basename="/renewable_energy_platform">
+      <Router>
         <Routes>
           <Route 
             path="/" 
@@ -40,6 +41,22 @@ function App() {
           />
         </Routes>
       </Router>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
     </div>
   )
 }
