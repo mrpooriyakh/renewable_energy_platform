@@ -160,7 +160,14 @@ function BeautifulStudentPanel({ user, onLogout }) {
     return (
       <div style={{
         minHeight: '100vh',
+        width: '100vw',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        margin: 0,
+        padding: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        overflow: 'auto',
         ...customCursor
       }}>
         {/* Header */}
@@ -168,14 +175,18 @@ function BeautifulStudentPanel({ user, onLogout }) {
           background: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           padding: '20px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <div style={{
             maxWidth: '1400px',
             margin: '0 auto',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            width: '100%',
+            boxSizing: 'border-box'
           }}>
             <div>
               <h1 style={{
@@ -395,7 +406,14 @@ function BeautifulStudentPanel({ user, onLogout }) {
     return (
       <div style={{
         minHeight: '100vh',
+        width: '100vw',
         background: energyType.gradient,
+        margin: 0,
+        padding: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        overflow: 'auto',
         ...customCursor
       }}>
         {/* Header */}
@@ -540,7 +558,14 @@ function BeautifulStudentPanel({ user, onLogout }) {
   return (
     <div style={{
       minHeight: '100vh',
+      width: '100vw',
       background: `linear-gradient(135deg, ${energyType.color}dd, ${category.color}dd)`,
+      margin: 0,
+      padding: 0,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      overflow: 'auto',
       ...customCursor
     }}>
       {/* Header */}

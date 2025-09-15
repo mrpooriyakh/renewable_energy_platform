@@ -27,7 +27,7 @@ function BeautifulLoginPage({ onLogin }) {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundImage: 'url("/background1.jpg"), linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      backgroundImage: 'url("/background1.jpg")',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -38,218 +38,181 @@ function BeautifulLoginPage({ onLogin }) {
       position: 'relative',
       ...customCursor
     }}>
-      {/* Overlay for better text readability */}
+      {/* Elegant overlay for better readability */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'rgba(0, 0, 0, 0.4)',
-        backdropFilter: 'blur(2px)'
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4))',
+        backdropFilter: 'blur(1px)'
       }}></div>
 
-      {/* Floating elements animation */}
+      {/* Main login card with classic design */}
       <div style={{
-        position: 'absolute',
-        top: '10%',
-        left: '10%',
-        width: '80px',
-        height: '80px',
-        borderRadius: '50%',
-        background: 'rgba(255, 255, 255, 0.1)',
-        animation: 'float1 6s ease-in-out infinite'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        top: '20%',
-        right: '15%',
-        width: '60px',
-        height: '60px',
-        borderRadius: '50%',
-        background: 'rgba(255, 255, 255, 0.1)',
-        animation: 'float2 4s ease-in-out infinite'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        bottom: '15%',
-        left: '20%',
-        width: '100px',
-        height: '100px',
-        borderRadius: '50%',
-        background: 'rgba(255, 255, 255, 0.1)',
-        animation: 'float3 8s ease-in-out infinite'
-      }}></div>
-
-      {/* Main login card */}
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '25px',
-        padding: '50px',
-        maxWidth: '500px',
+        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))',
+        borderRadius: '20px',
+        padding: '60px 50px',
+        maxWidth: '480px',
         width: '100%',
-        boxShadow: '0 30px 60px rgba(0, 0, 0, 0.3)',
-        backdropFilter: 'blur(10px)',
-        border: '2px solid rgba(255, 255, 255, 0.3)',
+        boxShadow: `
+          0 25px 50px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.05)
+        `,
+        border: '1px solid rgba(255, 255, 255, 0.2)',
         position: 'relative',
-        zIndex: 10,
-        animation: 'slideUp 0.8s ease-out'
+        zIndex: 10
       }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        {/* Elegant header */}
+        <div style={{ textAlign: 'center', marginBottom: '45px' }}>
           <div style={{
-            fontSize: '80px',
-            marginBottom: '20px',
-            animation: 'bounce 2s ease-in-out infinite'
-          }}>🌱</div>
+            width: '80px',
+            height: '80px',
+            background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+            borderRadius: '50%',
+            margin: '0 auto 25px auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 10px 25px rgba(34, 197, 94, 0.3)',
+            border: '3px solid rgba(255, 255, 255, 0.8)'
+          }}>
+            <span style={{ fontSize: '36px', color: 'white' }}>🌱</span>
+          </div>
+
           <h1 style={{
-            fontSize: '36px',
-            fontWeight: 'bold',
-            color: '#333',
-            marginBottom: '15px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+            fontSize: '32px',
+            fontWeight: '700',
+            color: '#1a202c',
+            marginBottom: '12px',
+            letterSpacing: '-0.5px',
+            fontFamily: 'system-ui, -apple-system, sans-serif'
           }}>
             Renewable Energy Platform
           </h1>
           <p style={{
-            color: '#666',
-            fontSize: '18px',
+            color: '#64748b',
+            fontSize: '16px',
             margin: 0,
-            lineHeight: '1.5'
+            lineHeight: '1.5',
+            fontWeight: '400'
           }}>
             Learn about sustainable energy solutions
           </p>
         </div>
 
-        {/* Error message */}
+        {/* Error message with elegant styling */}
         {error && (
           <div style={{
-            background: 'linear-gradient(135deg, #fee2e2, #fecaca)',
-            border: '2px solid #f87171',
-            borderRadius: '15px',
-            padding: '15px',
+            background: 'linear-gradient(135deg, #fef2f2, #fee2e2)',
+            border: '1px solid #fca5a5',
+            borderRadius: '12px',
+            padding: '16px',
             marginBottom: '25px',
-            textAlign: 'center',
-            animation: 'shake 0.5s ease-in-out'
+            textAlign: 'center'
           }}>
             <div style={{
               color: '#dc2626',
-              fontSize: '16px',
-              fontWeight: 'bold',
+              fontSize: '14px',
+              fontWeight: '600',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px'
+              gap: '8px'
             }}>
-              ⚠️ {error}
+              <span style={{ fontSize: '16px' }}>⚠️</span>
+              {error}
             </div>
           </div>
         )}
 
-        {/* Login form */}
+        {/* Elegant login form */}
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '25px' }}>
+          <div style={{ marginBottom: '24px' }}>
             <label style={{
               display: 'block',
-              marginBottom: '10px',
+              marginBottom: '8px',
               fontWeight: '600',
-              color: '#333',
-              fontSize: '16px'
+              color: '#374151',
+              fontSize: '14px',
+              letterSpacing: '0.025em'
             }}>
-              👤 Username
+              Username
             </label>
-            <div style={{ position: 'relative' }}>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                required
-                style={{
-                  width: '100%',
-                  padding: '18px 20px 18px 50px',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '15px',
-                  fontSize: '16px',
-                  boxSizing: 'border-box',
-                  transition: 'all 0.3s ease',
-                  outline: 'none',
-                  background: 'rgba(255, 255, 255, 0.9)'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#6366f1'
-                  e.target.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.3)'
-                  e.target.style.transform = 'translateY(-2px)'
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.boxShadow = 'none'
-                  e.target.style.transform = 'translateY(0px)'
-                }}
-              />
-              <div style={{
-                position: 'absolute',
-                left: '18px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '20px',
-                color: '#9ca3af'
-              }}>
-                👤
-              </div>
-            </div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              required
+              style={{
+                width: '100%',
+                padding: '16px 20px',
+                border: '2px solid #e5e7eb',
+                borderRadius: '12px',
+                fontSize: '16px',
+                boxSizing: 'border-box',
+                transition: 'all 0.3s ease',
+                outline: 'none',
+                background: '#ffffff',
+                color: '#1f2937', // Fixed: Dark text color
+                fontWeight: '500',
+                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#22c55e'
+                e.target.style.boxShadow = '0 0 0 3px rgba(34, 197, 94, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e5e7eb'
+                e.target.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+            />
           </div>
 
-          <div style={{ marginBottom: '30px' }}>
+          <div style={{ marginBottom: '32px' }}>
             <label style={{
               display: 'block',
-              marginBottom: '10px',
+              marginBottom: '8px',
               fontWeight: '600',
-              color: '#333',
-              fontSize: '16px'
+              color: '#374151',
+              fontSize: '14px',
+              letterSpacing: '0.025em'
             }}>
-              🔒 Password
+              Password
             </label>
-            <div style={{ position: 'relative' }}>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                style={{
-                  width: '100%',
-                  padding: '18px 20px 18px 50px',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '15px',
-                  fontSize: '16px',
-                  boxSizing: 'border-box',
-                  transition: 'all 0.3s ease',
-                  outline: 'none',
-                  background: 'rgba(255, 255, 255, 0.9)'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#6366f1'
-                  e.target.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.3)'
-                  e.target.style.transform = 'translateY(-2px)'
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.boxShadow = 'none'
-                  e.target.style.transform = 'translateY(0px)'
-                }}
-              />
-              <div style={{
-                position: 'absolute',
-                left: '18px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '20px',
-                color: '#9ca3af'
-              }}>
-                🔒
-              </div>
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+              style={{
+                width: '100%',
+                padding: '16px 20px',
+                border: '2px solid #e5e7eb',
+                borderRadius: '12px',
+                fontSize: '16px',
+                boxSizing: 'border-box',
+                transition: 'all 0.3s ease',
+                outline: 'none',
+                background: '#ffffff',
+                color: '#1f2937', // Fixed: Dark text color
+                fontWeight: '500',
+                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#22c55e'
+                e.target.style.boxShadow = '0 0 0 3px rgba(34, 197, 94, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e5e7eb'
+                e.target.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+            />
           </div>
 
           <button
@@ -257,37 +220,36 @@ function BeautifulLoginPage({ onLogin }) {
             disabled={loading}
             style={{
               width: '100%',
-              padding: '18px',
-              background: loading ? '#9ca3af' : 'linear-gradient(135deg, #667eea, #764ba2)',
+              padding: '16px',
+              background: loading ? '#9ca3af' : 'linear-gradient(135deg, #22c55e, #16a34a)',
               color: 'white',
               border: 'none',
-              borderRadius: '15px',
-              fontSize: '18px',
-              fontWeight: 'bold',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '600',
               cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s ease',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-              position: 'relative',
-              overflow: 'hidden'
+              boxShadow: loading ? 'none' : '0 4px 14px rgba(34, 197, 94, 0.4)',
+              letterSpacing: '0.025em'
             }}
             onMouseEnter={(e) => {
               if (!loading) {
-                e.target.style.transform = 'translateY(-3px)'
-                e.target.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.3)'
+                e.target.style.transform = 'translateY(-1px)'
+                e.target.style.boxShadow = '0 6px 20px rgba(34, 197, 94, 0.5)'
               }
             }}
             onMouseLeave={(e) => {
               if (!loading) {
                 e.target.style.transform = 'translateY(0px)'
-                e.target.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
+                e.target.style.boxShadow = '0 4px 14px rgba(34, 197, 94, 0.4)'
               }
             }}
           >
             {loading ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                 <div style={{
-                  width: '20px',
-                  height: '20px',
+                  width: '18px',
+                  height: '18px',
                   border: '2px solid transparent',
                   borderTop: '2px solid white',
                   borderRadius: '50%',
@@ -296,67 +258,87 @@ function BeautifulLoginPage({ onLogin }) {
                 Signing in...
               </div>
             ) : (
-              '🚀 Sign In'
+              'Sign In'
             )}
           </button>
         </form>
 
-        {/* Demo credentials */}
+        {/* Demo credentials with elegant styling */}
         <div style={{
-          background: 'linear-gradient(135deg, #f3f4f6, #e5e7eb)',
-          padding: '25px',
-          borderRadius: '15px',
-          marginTop: '30px',
-          border: '2px solid #d1d5db'
+          background: 'linear-gradient(135deg, #f8fafc, #f1f5f9)',
+          padding: '24px',
+          borderRadius: '16px',
+          marginTop: '32px',
+          border: '1px solid #e2e8f0'
         }}>
           <h3 style={{
-            fontSize: '16px',
-            fontWeight: 'bold',
-            marginBottom: '15px',
+            fontSize: '15px',
+            fontWeight: '700',
+            marginBottom: '16px',
             textAlign: 'center',
-            color: '#333'
+            color: '#374151',
+            letterSpacing: '0.025em'
           }}>
-            🎯 Demo Credentials
+            Demo Credentials
           </h3>
-          <div style={{ fontSize: '14px', color: '#666' }}>
+          <div style={{ fontSize: '14px' }}>
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
-              marginBottom: '10px',
-              padding: '8px',
-              background: 'rgba(59, 130, 246, 0.1)',
-              borderRadius: '8px'
+              alignItems: 'center',
+              marginBottom: '12px',
+              padding: '12px 16px',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.05))',
+              borderRadius: '10px',
+              border: '1px solid rgba(59, 130, 246, 0.1)'
             }}>
-              <span style={{ fontWeight: '500' }}>👨‍🎓 Student Portal:</span>
-              <strong style={{ color: '#2563eb' }}>admin / admin123</strong>
+              <span style={{ fontWeight: '600', color: '#4b5563' }}>Student Portal:</span>
+              <span style={{
+                fontWeight: '700',
+                color: '#2563eb',
+                fontFamily: 'ui-monospace, monospace',
+                fontSize: '13px'
+              }}>
+                admin / admin123
+              </span>
             </div>
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
-              padding: '8px',
-              background: 'rgba(16, 185, 129, 0.1)',
-              borderRadius: '8px'
+              alignItems: 'center',
+              padding: '12px 16px',
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.05))',
+              borderRadius: '10px',
+              border: '1px solid rgba(16, 185, 129, 0.1)'
             }}>
-              <span style={{ fontWeight: '500' }}>👨‍🏫 Teacher Portal:</span>
-              <strong style={{ color: '#059669' }}>admin1 / admin123</strong>
+              <span style={{ fontWeight: '600', color: '#4b5563' }}>Teacher Portal:</span>
+              <span style={{
+                fontWeight: '700',
+                color: '#059669',
+                fontFamily: 'ui-monospace, monospace',
+                fontSize: '13px'
+              }}>
+                admin1 / admin123
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Features preview */}
-        <div style={{ textAlign: 'center', marginTop: '25px' }}>
+        {/* Energy types preview with elegant design */}
+        <div style={{ textAlign: 'center', marginTop: '28px' }}>
           <p style={{
-            fontSize: '14px',
-            color: '#666',
-            marginBottom: '15px',
-            fontWeight: '500'
+            fontSize: '13px',
+            color: '#6b7280',
+            marginBottom: '16px',
+            fontWeight: '600',
+            letterSpacing: '0.025em'
           }}>
-            🌟 Explore renewable energy topics:
+            Explore renewable energy topics
           </p>
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '20px',
+            gap: '16px',
             flexWrap: 'wrap'
           }}>
             {[
@@ -364,31 +346,35 @@ function BeautifulLoginPage({ onLogin }) {
               { emoji: '💧', name: 'Hydro', color: '#3b82f6' },
               { emoji: '🔥', name: 'Geothermal', color: '#ef4444' },
               { emoji: '💨', name: 'Wind', color: '#10b981' }
-            ].map((energy, index) => (
+            ].map((energy) => (
               <div
                 key={energy.name}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '5px',
-                  animation: `float${index + 1} 3s ease-in-out infinite`,
-                  animationDelay: `${index * 0.5}s`
+                  gap: '6px',
+                  padding: '8px',
+                  borderRadius: '10px',
+                  background: `linear-gradient(135deg, ${energy.color}15, ${energy.color}08)`,
+                  border: `1px solid ${energy.color}20`,
+                  minWidth: '60px'
                 }}
               >
                 <div style={{
-                  fontSize: '28px',
-                  padding: '8px',
-                  borderRadius: '50%',
-                  background: `${energy.color}20`,
-                  border: `2px solid ${energy.color}30`
+                  fontSize: '24px',
+                  padding: '6px',
+                  borderRadius: '8px',
+                  background: `${energy.color}10`,
+                  border: `1px solid ${energy.color}20`
                 }}>
                   {energy.emoji}
                 </div>
                 <span style={{
                   fontSize: '11px',
                   color: energy.color,
-                  fontWeight: 'bold'
+                  fontWeight: '600',
+                  letterSpacing: '0.025em'
                 }}>
                   {energy.name}
                 </span>
@@ -398,55 +384,11 @@ function BeautifulLoginPage({ onLogin }) {
         </div>
       </div>
 
-      {/* Animations */}
+      {/* Subtle animations */}
       <style>{`
-        @keyframes slideUp {
-          0% {
-            opacity: 0;
-            transform: translateY(50px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-
-        @keyframes bounce {
-          0%, 20%, 50%, 80%, 100% {
-            transform: translateY(0);
-          }
-          40% {
-            transform: translateY(-10px);
-          }
-          60% {
-            transform: translateY(-5px);
-          }
-        }
-
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
-
-        @keyframes float1 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        @keyframes float2 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(-180deg); }
-        }
-
-        @keyframes float3 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-25px) rotate(180deg); }
         }
       `}</style>
     </div>

@@ -167,7 +167,14 @@ function BeautifulAdminPanel({ user, onLogout }) {
   return (
     <div style={{
       minHeight: '100vh',
+      width: '100vw',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      margin: 0,
+      padding: 0,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      overflow: 'auto',
       ...customCursor
     }}>
       {/* Header */}
