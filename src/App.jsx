@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import LoginPage from './components/LoginPage'
-import AdminPanel from './components/AdminPanel'
-import StudentPanel from './components/StudentPanel'
+import LoginPage from './components/SimpleLoginPage'
+import AdminPanel from './components/SimpleAdminPanel'
+import StudentPanel from './components/SimpleStudentPanel'
 import { supabase } from './lib/supabase'
 import './App.css'
 

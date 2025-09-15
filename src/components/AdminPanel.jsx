@@ -25,10 +25,6 @@ import {
   Center,
   Icon,
   useToast,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
   Divider,
   Table,
   Thead,
@@ -40,6 +36,7 @@ import {
   IconButton,
   Tooltip
 } from '@chakra-ui/react'
+// Removed Alert components - using simple Box instead
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FaSun,
@@ -361,14 +358,18 @@ function AdminPanel({ user, onLogout }) {
 
             <CardBody>
               {message && (
-                <Alert
-                  status={messageType === 'error' ? 'error' : messageType === 'warning' ? 'warning' : 'success'}
+                <Box
+                  bg={messageType === 'error' ? 'red.50' : messageType === 'warning' ? 'yellow.50' : 'green.50'}
+                  border="1px"
+                  borderColor={messageType === 'error' ? 'red.200' : messageType === 'warning' ? 'yellow.200' : 'green.200'}
                   borderRadius="md"
+                  p={3}
                   mb={6}
                 >
-                  <AlertIcon />
-                  <AlertDescription>{message}</AlertDescription>
-                </Alert>
+                  <Text color={messageType === 'error' ? 'red.600' : messageType === 'warning' ? 'yellow.600' : 'green.600'} fontSize="sm">
+                    {message}
+                  </Text>
+                </Box>
               )}
 
               <form onSubmit={handleSubmit}>

@@ -12,8 +12,6 @@ import {
   CardBody,
   FormControl,
   FormLabel,
-  Alert,
-  AlertIcon,
   Icon,
   useColorModeValue,
   Center
@@ -187,10 +185,15 @@ function LoginPage({ onLogin }) {
                 </Center>
 
                 {error && (
-                  <Alert status="error" borderRadius="lg">
-                    <AlertIcon />
-                    {error}
-                  </Alert>
+                  <Box
+                    bg="red.50"
+                    border="1px"
+                    borderColor="red.200"
+                    borderRadius="lg"
+                    p={3}
+                  >
+                    <Text color="red.600" fontSize="sm">{error}</Text>
+                  </Box>
                 )}
 
                 <form onSubmit={handleSubmit}>
