@@ -1,10 +1,44 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import LoginPage from './components/LoginPage'
 import AdminPanel from './components/AdminPanel'
 import StudentPanel from './components/StudentPanel'
 import { supabase } from './lib/supabase'
 import './App.css'
+
+const theme = extendTheme({
+  colors: {
+    brand: {
+      50: '#e6f7ff',
+      100: '#bae7ff',
+      200: '#91d5ff',
+      300: '#69c0ff',
+      400: '#40a9ff',
+      500: '#1890ff',
+      600: '#096dd9',
+      700: '#0050b3',
+      800: '#003a8c',
+      900: '#002766',
+    },
+    green: {
+      50: '#f0f9ff',
+      100: '#dcfce7',
+      200: '#bbf7d0',
+      300: '#86efac',
+      400: '#4ade80',
+      500: '#22c55e',
+      600: '#16a34a',
+      700: '#15803d',
+      800: '#166534',
+      900: '#14532d',
+    }
+  },
+  fonts: {
+    heading: 'Inter, system-ui, sans-serif',
+    body: 'Inter, system-ui, sans-serif',
+  },
+})
 
 function App() {
   const [user, setUser] = useState(null)
@@ -104,8 +138,8 @@ function App() {
   }
 
   return (
-    <Router>
-      <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+    <ChakraProvider theme={theme}>
+      <Router>
         <Routes>
           <Route
             path="/"
@@ -142,8 +176,8 @@ function App() {
             }
           />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </ChakraProvider>
   )
 }
 

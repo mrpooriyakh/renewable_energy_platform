@@ -1,10 +1,99 @@
 import { useState, useEffect } from 'react'
+import {
+  Box,
+  Container,
+  Heading,
+  Text,
+  Button,
+  Input,
+  SimpleGrid,
+  Card,
+  CardHeader,
+  CardBody,
+  Badge,
+  Flex,
+  Avatar,
+  Spacer,
+  VStack,
+  HStack,
+  IconButton,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  useColorModeValue,
+  Spinner,
+  Center,
+  Image,
+  Link,
+  Divider,
+  Icon,
+  useToast
+} from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  FaSun,
+  FaWater,
+  FaFire,
+  FaWind,
+  FaDownload,
+  FaSearch,
+  FaSignOutAlt,
+  FaBook,
+  FaFileAlt,
+  FaCalendarAlt,
+  FaUser
+} from 'react-icons/fa'
 import { supabase } from '../lib/supabase'
+
+const MotionBox = motion(Box)
+const MotionCard = motion(Card)
+
+const energyTypes = {
+  solar: {
+    name: 'Solar Energy',
+    icon: FaSun,
+    color: 'orange',
+    gradient: 'linear(to-r, orange.400, yellow.400)',
+    bgGradient: 'linear(to-br, orange.50, yellow.50)',
+    description: 'Harness the power of the sun'
+  },
+  hydro: {
+    name: 'Hydro Energy',
+    icon: FaWater,
+    color: 'blue',
+    gradient: 'linear(to-r, blue.400, cyan.400)',
+    bgGradient: 'linear(to-br, blue.50, cyan.50)',
+    description: 'Energy from flowing water'
+  },
+  geothermal: {
+    name: 'Geothermal Energy',
+    icon: FaFire,
+    color: 'red',
+    gradient: 'linear(to-r, red.400, orange.400)',
+    bgGradient: 'linear(to-br, red.50, orange.50)',
+    description: 'Heat from the Earth\'s core'
+  },
+  wind: {
+    name: 'Wind Energy',
+    icon: FaWind,
+    color: 'green',
+    gradient: 'linear(to-r, green.400, teal.400)',
+    bgGradient: 'linear(to-br, green.50, teal.50)',
+    description: 'Power from moving air'
+  }
+}
 
 function StudentPanel({ user, onLogout }) {
   const [content, setContent] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedTab, setSelectedTab] = useState(0)
+  const toast = useToast()
+
+  const bgColor = useColorModeValue('gray.50', 'gray.900')
+  const cardBg = useColorModeValue('white', 'gray.800')
 
   useEffect(() => {
     fetchContent()
@@ -15,6 +104,13 @@ function StudentPanel({ user, onLogout }) {
         { event: '*', schema: 'public', table: 'content' },
         () => {
           fetchContent()
+          toast({
+            title: 'New content available!',
+            description: 'Content has been updated in real-time.',
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
         }
       )
       .subscribe()
@@ -22,7 +118,7 @@ function StudentPanel({ user, onLogout }) {
     return () => {
       supabase.removeChannel(subscription)
     }
-  }, [])
+  }, [toast])
 
   const fetchContent = async () => {
     try {
@@ -35,6 +131,13 @@ function StudentPanel({ user, onLogout }) {
       setContent(data || [])
     } catch (error) {
       console.error('Error fetching content:', error)
+      toast({
+        title: 'Error loading content',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
     } finally {
       setLoading(false)
     }
@@ -48,239 +151,332 @@ function StudentPanel({ user, onLogout }) {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    toast({
+      title: 'Download started',
+      description: `Downloading ${fileName}`,
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
   }
 
-  const filteredContent = content.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const getContentByType = (type) => {
+    return content.filter(item => {
+      const energyType = item.energy_type || 'general'
+      const matchesType = type === 'all' || energyType === type
+      const matchesSearch = searchTerm === '' ||
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      return matchesType && matchesSearch
+    })
+  }
+
+  const getAllContent = () => {
+    return content.filter(item =>
+      searchTerm === '' ||
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }
+
+  const ContentCard = ({ item, index }) => {
+    const energyType = energyTypes[item.energy_type] || {
+      name: 'General',
+      icon: FaBook,
+      color: 'gray',
+      gradient: 'linear(to-r, gray.400, gray.600)',
+      bgGradient: 'linear(to-br, gray.50, gray.100)'
+    }
+
+    return (
+      <MotionCard
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.1 }}
+        bg={cardBg}
+        shadow="md"
+        borderRadius="xl"
+        overflow="hidden"
+        _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
+        transition="all 0.3s ease"
+        border="1px"
+        borderColor="gray.200"
+      >
+        <Box
+          h="4px"
+          bgGradient={energyType.gradient}
+        />
+        <CardHeader pb={2}>
+          <Flex align="center" gap={3}>
+            <Box
+              p={2}
+              borderRadius="lg"
+              bgGradient={energyType.bgGradient}
+            >
+              <Icon as={energyType.icon} color={`${energyType.color}.500`} size="20px" />
+            </Box>
+            <VStack align="start" spacing={0} flex={1}>
+              <Heading size="md" color="gray.800">{item.title}</Heading>
+              <Badge colorScheme={energyType.color} variant="subtle">
+                {energyType.name}
+              </Badge>
+            </VStack>
+          </Flex>
+        </CardHeader>
+
+        <CardBody pt={0}>
+          <Text color="gray.600" mb={4} lineHeight="1.6">
+            {item.description}
+          </Text>
+
+          {item.file_url && (
+            <Box
+              p={3}
+              bg="gray.50"
+              borderRadius="md"
+              border="1px dashed"
+              borderColor="gray.300"
+              mb={4}
+            >
+              <HStack justify="space-between">
+                <HStack>
+                  <Icon as={FaFileAlt} color="blue.500" />
+                  <Text fontSize="sm" fontWeight="medium">
+                    {item.file_name || 'Download File'}
+                  </Text>
+                </HStack>
+                <Button
+                  size="sm"
+                  colorScheme="blue"
+                  variant="ghost"
+                  onClick={() => handleDownload(item.file_url, item.file_name)}
+                  leftIcon={<FaDownload />}
+                >
+                  Download
+                </Button>
+              </HStack>
+            </Box>
+          )}
+
+          <Divider mb={3} />
+
+          <HStack justify="space-between" fontSize="sm" color="gray.500">
+            <HStack>
+              <Icon as={FaUser} />
+              <Text>By: {item.uploaded_by?.split('@')[0] || 'Teacher'}</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaCalendarAlt} />
+              <Text>{new Date(item.created_at).toLocaleDateString()}</Text>
+            </HStack>
+          </HStack>
+        </CardBody>
+      </MotionCard>
+    )
+  }
 
   if (loading) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ fontSize: '20px' }}>Loading content...</div>
-      </div>
+      <Center minH="100vh" bg={bgColor}>
+        <VStack spacing={4}>
+          <Spinner size="xl" color="blue.500" thickness="4px" />
+          <Text fontSize="lg" color="gray.600">Loading renewable energy content...</Text>
+        </VStack>
+      </Center>
     )
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+    <Box minH="100vh" bg={bgColor}>
       {/* Header */}
-      <header style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937' }}>Student Learning Portal</h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ color: '#374151' }}>Welcome, {user.email}</span>
-              <button
+      <Box bg="white" shadow="sm" borderBottom="1px" borderColor="gray.200">
+        <Container maxW="7xl" py={4}>
+          <Flex align="center">
+            <HStack spacing={3}>
+              <Box
+                p={2}
+                bg="green.100"
+                borderRadius="lg"
+              >
+                <Icon as={FaBook} color="green.500" size="24px" />
+              </Box>
+              <VStack align="start" spacing={0}>
+                <Heading size="lg" color="gray.800">Renewable Energy Learning Hub</Heading>
+                <Text color="gray.600" fontSize="sm">Explore sustainable energy solutions</Text>
+              </VStack>
+            </HStack>
+            <Spacer />
+            <HStack spacing={4}>
+              <Text fontSize="sm" color="gray.600">Welcome, {user.email}</Text>
+              <Button
+                leftIcon={<FaSignOutAlt />}
+                colorScheme="red"
+                variant="outline"
+                size="sm"
                 onClick={onLogout}
-                style={{
-                  backgroundColor: '#dc2626',
-                  color: 'white',
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
               >
                 Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+              </Button>
+            </HStack>
+          </Flex>
+        </Container>
+      </Box>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px' }}>
+      <Container maxW="7xl" py={8}>
         {/* Search Bar */}
-        <div style={{ marginBottom: '24px' }}>
-          <input
-            type="text"
-            placeholder="Search content..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              maxWidth: '400px',
-              width: '100%',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              padding: '12px 16px',
-              fontSize: '14px',
-              outline: 'none'
-            }}
-          />
-        </div>
+        <MotionBox
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          mb={8}
+        >
+          <Box position="relative" maxW="md">
+            <Input
+              placeholder="Search renewable energy content..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              pl={10}
+              size="lg"
+              borderRadius="full"
+              bg="white"
+              shadow="sm"
+              border="1px"
+              borderColor="gray.300"
+              _focus={{ borderColor: 'blue.500', shadow: 'md' }}
+            />
+            <Icon
+              as={FaSearch}
+              position="absolute"
+              left={3}
+              top="50%"
+              transform="translateY(-50%)"
+              color="gray.400"
+            />
+          </Box>
+        </MotionBox>
 
-        {/* Stats */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>Available Content</h2>
-            <p style={{ color: '#6b7280' }}>
-              {filteredContent.length} {filteredContent.length === 1 ? 'item' : 'items'} available
-            </p>
-          </div>
-        </div>
+        {/* Energy Type Tabs */}
+        <Tabs index={selectedTab} onChange={setSelectedTab} variant="soft-rounded" colorScheme="blue">
+          <TabList mb={8} flexWrap="wrap" gap={2}>
+            <Tab>All Content ({getAllContent().length})</Tab>
+            {Object.entries(energyTypes).map(([key, type]) => (
+              <Tab key={key}>
+                <HStack spacing={2}>
+                  <Icon as={type.icon} />
+                  <Text>{type.name} ({getContentByType(key).length})</Text>
+                </HStack>
+              </Tab>
+            ))}
+          </TabList>
 
-        {/* Content Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '24px'
-        }}>
-          {filteredContent.length === 0 ? (
-            <div style={{
-              gridColumn: '1 / -1',
-              textAlign: 'center',
-              padding: '48px 0'
-            }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📚</div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '500',
-                color: '#1f2937',
-                marginBottom: '8px'
-              }}>
-                {searchTerm ? 'No content found' : 'No content available yet'}
-              </h3>
-              <p style={{ color: '#6b7280' }}>
-                {searchTerm
-                  ? 'Try adjusting your search terms'
-                  : 'Your teacher will upload learning materials soon!'
-                }
-              </p>
-            </div>
-          ) : (
-            filteredContent.map((item) => (
-              <div key={item.id} style={{
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                transition: 'box-shadow 0.2s ease',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
-              onMouseLeave={(e) => e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'}
-              >
-                <div style={{ padding: '24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <h3 style={{
-                      fontSize: '18px',
-                      fontWeight: '600',
-                      color: '#1f2937',
-                      flex: 1,
-                      marginRight: '8px'
-                    }}>
-                      {item.title}
-                    </h3>
-                    {item.file_url && (
-                      <span style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        padding: '2px 8px',
-                        borderRadius: '9999px',
-                        fontSize: '12px',
-                        fontWeight: '500',
-                        backgroundColor: '#dbeafe',
-                        color: '#1e40af'
-                      }}>
-                        📎 File
-                      </span>
-                    )}
-                  </div>
+          <TabPanels>
+            {/* All Content Tab */}
+            <TabPanel p={0}>
+              <AnimatePresence>
+                {getAllContent().length === 0 ? (
+                  <MotionBox
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    textAlign="center"
+                    py={16}
+                  >
+                    <Icon as={FaBook} size="4em" color="gray.300" mb={4} />
+                    <Heading size="lg" color="gray.600" mb={2}>
+                      {searchTerm ? 'No content found' : 'No content available yet'}
+                    </Heading>
+                    <Text color="gray.500">
+                      {searchTerm
+                        ? 'Try adjusting your search terms'
+                        : 'Your teacher will upload learning materials soon!'
+                      }
+                    </Text>
+                  </MotionBox>
+                ) : (
+                  <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                    {getAllContent().map((item, index) => (
+                      <ContentCard key={item.id} item={item} index={index} />
+                    ))}
+                  </SimpleGrid>
+                )}
+              </AnimatePresence>
+            </TabPanel>
 
-                  <p style={{
-                    color: '#6b7280',
-                    fontSize: '14px',
-                    marginBottom: '16px',
-                    lineHeight: '1.5'
-                  }}>
-                    {item.description}
-                  </p>
-
-                  <div style={{ marginBottom: '12px' }}>
-                    {item.file_url && (
-                      <div style={{
-                        backgroundColor: '#f9fafb',
-                        padding: '12px',
-                        borderRadius: '6px'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '14px', color: '#6b7280' }}>📎</span>
-                            <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>
-                              {item.file_name || 'Download File'}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => handleDownload(item.file_url, item.file_name)}
-                            style={{
-                              color: '#6366f1',
-                              fontSize: '14px',
-                              fontWeight: '500',
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            Download
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '14px',
-                      color: '#6b7280',
-                      marginTop: '12px'
-                    }}>
-                      <span>
-                        By: {item.uploaded_by?.split('@')[0] || 'Teacher'}
-                      </span>
-                      <span>
-                        {new Date(item.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+            {/* Energy Type Specific Tabs */}
+            {Object.entries(energyTypes).map(([key, type]) => (
+              <TabPanel key={key} p={0}>
+                <AnimatePresence>
+                  {getContentByType(key).length === 0 ? (
+                    <MotionBox
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      textAlign="center"
+                      py={16}
+                    >
+                      <Box
+                        p={4}
+                        bg={type.bgGradient}
+                        borderRadius="full"
+                        display="inline-block"
+                        mb={4}
+                      >
+                        <Icon as={type.icon} size="3em" color={`${type.color}.500`} />
+                      </Box>
+                      <Heading size="lg" color="gray.600" mb={2}>
+                        No {type.name.toLowerCase()} content yet
+                      </Heading>
+                      <Text color="gray.500" mb={4}>
+                        {type.description}
+                      </Text>
+                      <Text color="gray.400" fontSize="sm">
+                        Check back soon for exciting content about {type.name.toLowerCase()}!
+                      </Text>
+                    </MotionBox>
+                  ) : (
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                      {getContentByType(key).map((item, index) => (
+                        <ContentCard key={item.id} item={item} index={index} />
+                      ))}
+                    </SimpleGrid>
+                  )}
+                </AnimatePresence>
+              </TabPanel>
+            ))}
+          </TabPanels>
+        </Tabs>
 
         {/* Real-time indicator */}
-        <div style={{ marginTop: '32px', textAlign: 'center' }}>
-          <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '4px 12px',
-            borderRadius: '9999px',
-            fontSize: '12px',
-            fontWeight: '500',
-            backgroundColor: '#dcfce7',
-            color: '#166534'
-          }}>
-            <span style={{
-              width: '8px',
-              height: '8px',
-              backgroundColor: '#22c55e',
-              borderRadius: '50%',
-              marginRight: '8px',
-              animation: 'pulse 2s infinite'
-            }}></span>
-            Live updates enabled
-          </span>
-        </div>
-      </div>
-    </div>
+        <MotionBox
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          mt={12}
+          textAlign="center"
+        >
+          <Badge
+            colorScheme="green"
+            variant="subtle"
+            px={3}
+            py={1}
+            borderRadius="full"
+            fontSize="sm"
+          >
+            <HStack spacing={2}>
+              <Box
+                w={2}
+                h={2}
+                bg="green.500"
+                borderRadius="full"
+                animation="pulse 2s infinite"
+              />
+              <Text>Live updates enabled</Text>
+            </HStack>
+          </Badge>
+        </MotionBox>
+      </Container>
+    </Box>
   )
 }
 
