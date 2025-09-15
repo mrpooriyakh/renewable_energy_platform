@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import LoginPage from './components/SimpleLoginPage'
-import AdminPanel from './components/SimpleAdminPanel'
-import StudentPanel from './components/SimpleStudentPanel'
+import LoginPage from './components/BeautifulLoginPage'
+import AdminPanel from './components/BeautifulAdminPanel'
+import StudentPanel from './components/BeautifulStudentPanel'
 import { supabase } from './lib/supabase'
 import './App.css'
 
