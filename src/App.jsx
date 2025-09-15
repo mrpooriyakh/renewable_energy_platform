@@ -46,48 +46,40 @@ function App() {
 
   const handleLogin = async (username, password) => {
     try {
-      // Map usernames to emails for Supabase auth
-      const emailMap = {
-        'admin': 'admin@admin.com',
-        'admin1': 'admin1@admin1.com'
+      // Simple hardcoded authentication check
+      const validCredentials = {
+        'admin': 'admin123',
+        'admin1': 'admin123'
       }
 
-      const email = emailMap[username] || `${username}@student.com`
+      // Check if credentials match
+      if (validCredentials[username] !== password) {
+        throw new Error('Invalid username or password')
+      }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
+      console.log('Valid credentials provided, creating mock session...')
 
-      if (error) {
-        // If user doesn't exist, create them
-        if (error.message.includes('Invalid login credentials')) {
-          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: {
-                username: username,
-                role: username === 'admin1' ? 'admin' : 'student'
-              }
-            }
-          })
-
-          if (signUpError) throw signUpError
-
-          // After signup, sign in immediately
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-            email,
-            password
-          })
-
-          if (signInError) throw signInError
-          return signInData
+      // Create a mock user session for demo purposes
+      const mockUser = {
+        id: username === 'admin1' ? 'admin1-uuid' : 'admin-uuid',
+        email: username === 'admin1' ? 'admin1@admin1.com' : 'admin@admin.com',
+        user_metadata: {
+          username: username,
+          role: username === 'admin1' ? 'admin' : 'student'
         }
-        throw error
       }
 
-      return data
+      const mockSession = {
+        user: mockUser,
+        access_token: 'mock-token-' + username
+      }
+
+      // Set mock user state
+      setUser(mockUser)
+      setUserRole(username === 'admin1' ? 'admin' : 'student')
+
+      console.log('Mock login successful:', mockSession)
+      return { data: mockSession }
     } catch (error) {
       console.error('Login error:', error)
       throw error

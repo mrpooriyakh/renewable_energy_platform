@@ -37,21 +37,42 @@ function AdminPanel({ user, onLogout }) {
       let fileName = null
 
       if (file) {
-        const fileExt = file.name.split('.').pop()
-        const fileName_ = `${Date.now()}.${fileExt}`
+        try {
+          const fileExt = file.name.split('.').pop()
+          const fileName_ = `${Date.now()}.${fileExt}`
 
-        const { error: uploadError } = await supabase.storage
-          .from('content-files')
-          .upload(fileName_, file)
+          console.log('Attempting to upload file:', fileName_)
 
-        if (uploadError) throw uploadError
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('content-files')
+            .upload(fileName_, file, {
+              cacheControl: '3600',
+              upsert: false
+            })
 
-        const { data: urlData } = supabase.storage
-          .from('content-files')
-          .getPublicUrl(fileName_)
+          if (uploadError) {
+            console.error('Upload error:', uploadError)
+            // Continue without file if upload fails
+            console.log('File upload failed, continuing with content only...')
+            fileUrl = null
+            fileName = null
+          } else {
+            console.log('Upload successful:', uploadData)
 
-        fileUrl = urlData.publicUrl
-        fileName = file.name
+            const { data: urlData } = supabase.storage
+              .from('content-files')
+              .getPublicUrl(fileName_)
+
+            fileUrl = urlData.publicUrl
+            fileName = file.name
+            console.log('File URL generated:', fileUrl)
+          }
+        } catch (fileError) {
+          console.error('File processing error:', fileError)
+          // Continue without file if there's any error
+          fileUrl = null
+          fileName = null
+        }
       }
 
       const { error } = await supabase
@@ -68,7 +89,14 @@ function AdminPanel({ user, onLogout }) {
 
       if (error) throw error
 
-      setMessage('Content uploaded successfully!')
+      if (fileUrl) {
+        setMessage('Content uploaded successfully with file!')
+      } else if (file) {
+        setMessage('Content uploaded successfully (file upload failed - check console)')
+      } else {
+        setMessage('Content uploaded successfully!')
+      }
+
       setTitle('')
       setDescription('')
       setFile(null)

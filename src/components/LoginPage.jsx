@@ -168,8 +168,8 @@ function LoginPage({ onLogin }) {
             marginTop: '24px'
           }}>
             <p>Demo credentials:</p>
-            <p><strong>Student:</strong> admin / admin</p>
-            <p><strong>Teacher:</strong> admin1 / admin1</p>
+            <p><strong>Student:</strong> admin / admin123</p>
+            <p><strong>Teacher:</strong> admin1 / admin123</p>
           </div>
         </form>
       </div>
