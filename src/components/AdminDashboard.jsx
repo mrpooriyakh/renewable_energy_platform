@@ -5,7 +5,7 @@ import { gsap } from 'gsap'
 import { Plus, Edit, Trash2, Eye, Users, BookOpen, BarChart3 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import AIChatbot from './AIChatbot'
-import ContentManagementModal from './ContentManagementModal'
+import NewContentModal from './NewContentModal'
 import { useCourseStore } from '../store/courseStore'
 import './AdminDashboard.css'
 
@@ -565,13 +565,11 @@ const AdminDashboard = ({ user, onLogout }) => {
       
       <AIChatbot />
       
-      {/* Content Management Modal */}
-      <ContentManagementModal
+      {/* New Content Modal */}
+      <NewContentModal
         isOpen={isModalOpen}
         onClose={closeContentModal}
         moduleId={selectedModule}
-        contentType={selectedContentType}
-        editContent={editingContent}
       />
     </div>
   )

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
+import toast from 'react-hot-toast'
+import apiService from '../services/api'
 import './LoginForm.css'
 
 const LoginForm = ({ onLogin }) => {
@@ -146,53 +148,52 @@ const LoginForm = ({ onLogin }) => {
       repeat: 1
     })
 
-    // Check credentials and determine user role
-    let userData = null;
-    
-    if (studentId === 'admin' && password === 'admin') {
-      userData = { 
-        studentId, 
-        name: 'Student User',
-        role: 'student'
-      }
-    } else if (studentId === 'admin1' && password === 'admin1') {
-      userData = { 
-        studentId, 
-        name: 'Professor Smith',
-        role: 'admin'
-      }
-    }
+    try {
+      // Make API call to login
+      const response = await apiService.login(studentId, password)
 
-    if (userData) {
-      setTimeout(() => {
-        // Success animation
-        gsap.to(cardRef.current, {
-          scale: 1.05,
-          duration: 0.2,
-          yoyo: true,
-          repeat: 1,
-          onComplete: () => {
-            onLogin(userData)
-            navigate('/main-dashboard')
-            setIsLoading(false)
-          }
-        })
-      }, 500)
-    } else {
-      setTimeout(() => {
-        // Error shake animation
-        gsap.to(cardRef.current, {
-          x: -10,
-          duration: 0.1,
-          yoyo: true,
-          repeat: 5,
-          onComplete: () => {
-            gsap.set(cardRef.current, { x: 0 })
-          }
-        })
-        setError('Invalid student ID or password')
-        setIsLoading(false)
-      }, 500)
+      // Get user details
+      const userDetails = await apiService.getCurrentUser()
+
+      const userData = {
+        studentId: userDetails.username,
+        name: userDetails.full_name,
+        role: userDetails.role === 'STUDENT' ? 'student' : 'admin',
+        email: userDetails.email,
+        token: response.access_token
+      }
+
+      // Success animation
+      gsap.to(cardRef.current, {
+        scale: 1.05,
+        duration: 0.2,
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          onLogin(userData)
+          toast.success(`Welcome back, ${userData.name}!`)
+          navigate('/main-dashboard')
+          setIsLoading(false)
+        }
+      })
+
+    } catch (error) {
+      console.error('Login error:', error)
+
+      // Error shake animation
+      gsap.to(cardRef.current, {
+        x: -10,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 5,
+        onComplete: () => {
+          gsap.set(cardRef.current, { x: 0 })
+        }
+      })
+
+      setError(error.message || 'Invalid credentials. Please try again.')
+      setIsLoading(false)
+      toast.error('Login failed. Please check your credentials.')
     }
   }
 
