@@ -27,11 +27,6 @@ function AdminPanel({ user, onLogout }) {
     }
   }
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0]
-    setFile(selectedFile)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -41,18 +36,16 @@ function AdminPanel({ user, onLogout }) {
       let fileUrl = null
       let fileName = null
 
-      // Upload file to Supabase Storage if file is selected
       if (file) {
         const fileExt = file.name.split('.').pop()
         const fileName_ = `${Date.now()}.${fileExt}`
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('content-files')
           .upload(fileName_, file)
 
         if (uploadError) throw uploadError
 
-        // Get public URL
         const { data: urlData } = supabase.storage
           .from('content-files')
           .getPublicUrl(fileName_)
@@ -61,8 +54,7 @@ function AdminPanel({ user, onLogout }) {
         fileName = file.name
       }
 
-      // Insert content record
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('content')
         .insert([
           {
@@ -73,7 +65,6 @@ function AdminPanel({ user, onLogout }) {
             uploaded_by: user.email
           }
         ])
-        .select()
 
       if (error) throw error
 
@@ -81,65 +72,37 @@ function AdminPanel({ user, onLogout }) {
       setTitle('')
       setDescription('')
       setFile(null)
-      // Reset file input
-      const fileInput = document.getElementById('file-input')
-      if (fileInput) fileInput.value = ''
-
-      // Refresh uploads list
+      document.getElementById('file-input').value = ''
       fetchUploads()
 
     } catch (error) {
       setMessage(`Error: ${error.message}`)
-      console.error('Upload error:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDelete = async (id, fileUrl) => {
-    if (!window.confirm('Are you sure you want to delete this content?')) return
-
-    try {
-      setLoading(true)
-
-      // Delete file from storage if exists
-      if (fileUrl) {
-        const fileName = fileUrl.split('/').pop()
-        await supabase.storage
-          .from('content-files')
-          .remove([fileName])
-      }
-
-      // Delete record from database
-      const { error } = await supabase
-        .from('content')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
-
-      setMessage('Content deleted successfully!')
-      fetchUploads()
-    } catch (error) {
-      setMessage(`Error: ${error.message}`)
-      console.error('Delete error:', error)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
       {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Teacher Admin Panel</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user.email}</span>
+      <header style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937' }}>Teacher Admin Panel</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span style={{ color: '#374151' }}>Welcome, {user.email}</span>
               <button
                 onClick={onLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Logout
               </button>
@@ -148,66 +111,86 @@ function AdminPanel({ user, onLogout }) {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
           {/* Upload Form */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Upload New Content</h2>
+          <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Upload New Content</h2>
 
             {message && (
-              <div className={`p-3 rounded mb-4 ${
-                message.includes('Error')
-                  ? 'bg-red-100 text-red-700'
-                  : 'bg-green-100 text-green-700'
-              }`}>
+              <div style={{
+                padding: '12px',
+                borderRadius: '6px',
+                marginBottom: '16px',
+                backgroundColor: message.includes('Error') ? '#fee2e2' : '#dcfce7',
+                color: message.includes('Error') ? '#991b1b' : '#166534'
+              }}>
                 {message}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+            <form onSubmit={handleSubmit}>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
                   Title *
                 </label>
                 <input
                   type="text"
-                  id="title"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    outline: 'none'
+                  }}
                   placeholder="Enter content title"
                 />
               </div>
 
-              <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
                   Description *
                 </label>
                 <textarea
-                  id="description"
                   required
                   rows="3"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    outline: 'none',
+                    resize: 'vertical'
+                  }}
                   placeholder="Enter content description"
                 />
               </div>
 
-              <div>
-                <label htmlFor="file-input" className="block text-sm font-medium text-gray-700">
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
                   File (optional)
                 </label>
                 <input
                   type="file"
                   id="file-input"
-                  onChange={handleFileChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.mp4,.mp3"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '14px'
+                  }}
                 />
                 {file && (
-                  <p className="mt-1 text-sm text-gray-600">
+                  <p style={{ marginTop: '4px', fontSize: '14px', color: '#6b7280' }}>
                     Selected: {file.name}
                   </p>
                 )}
@@ -216,7 +199,17 @@ function AdminPanel({ user, onLogout }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  width: '100%',
+                  backgroundColor: loading ? '#9ca3af' : '#6366f1',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  fontWeight: '500',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.5 : 1
+                }}
               >
                 {loading ? 'Uploading...' : 'Upload Content'}
               </button>
@@ -224,34 +217,28 @@ function AdminPanel({ user, onLogout }) {
           </div>
 
           {/* Uploaded Content List */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Uploaded Content ({uploads.length})</h2>
+          <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Uploaded Content ({uploads.length})</h2>
 
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
               {uploads.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No content uploaded yet</p>
+                <p style={{ color: '#6b7280', textAlign: 'center', padding: '32px 0' }}>No content uploaded yet</p>
               ) : (
                 uploads.map((upload) => (
-                  <div key={upload.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{upload.title}</h3>
-                        <p className="text-sm text-gray-600 mt-1">{upload.description}</p>
-                        {upload.file_name && (
-                          <p className="text-sm text-blue-600 mt-1">📎 {upload.file_name}</p>
-                        )}
-                        <p className="text-xs text-gray-400 mt-2">
-                          {new Date(upload.created_at).toLocaleString()}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => handleDelete(upload.id, upload.file_url)}
-                        className="ml-4 text-red-600 hover:text-red-800 text-sm"
-                        disabled={loading}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                  <div key={upload.id} style={{
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    marginBottom: '16px'
+                  }}>
+                    <h3 style={{ fontWeight: '500', color: '#1f2937', marginBottom: '4px' }}>{upload.title}</h3>
+                    <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>{upload.description}</p>
+                    {upload.file_name && (
+                      <p style={{ fontSize: '14px', color: '#2563eb', marginBottom: '8px' }}>📎 {upload.file_name}</p>
+                    )}
+                    <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+                      {new Date(upload.created_at).toLocaleString()}
+                    </p>
                   </div>
                 ))
               )}

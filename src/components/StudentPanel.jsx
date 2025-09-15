@@ -9,7 +9,6 @@ function StudentPanel({ user, onLogout }) {
   useEffect(() => {
     fetchContent()
 
-    // Subscribe to real-time updates
     const subscription = supabase
       .channel('content-changes')
       .on('postgres_changes',
@@ -58,24 +57,38 @@ function StudentPanel({ user, onLogout }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading content...</div>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ fontSize: '20px' }}>Loading content...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
       {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Student Learning Portal</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user.email}</span>
+      <header style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937' }}>Student Learning Portal</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span style={{ color: '#374151' }}>Welcome, {user.email}</span>
               <button
                 onClick={onLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Logout
               </button>
@@ -84,37 +97,58 @@ function StudentPanel({ user, onLogout }) {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px' }}>
         {/* Search Bar */}
-        <div className="mb-6">
+        <div style={{ marginBottom: '24px' }}>
           <input
             type="text"
             placeholder="Search content..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-md border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            style={{
+              maxWidth: '400px',
+              width: '100%',
+              border: '1px solid #d1d5db',
+              borderRadius: '8px',
+              padding: '12px 16px',
+              fontSize: '14px',
+              outline: 'none'
+            }}
           />
         </div>
 
         {/* Stats */}
-        <div className="mb-6">
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-2">Available Content</h2>
-            <p className="text-gray-600">
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>Available Content</h2>
+            <p style={{ color: '#6b7280' }}>
               {filteredContent.length} {filteredContent.length === 1 ? 'item' : 'items'} available
             </p>
           </div>
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: '24px'
+        }}>
           {filteredContent.length === 0 ? (
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">📚</div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+            <div style={{
+              gridColumn: '1 / -1',
+              textAlign: 'center',
+              padding: '48px 0'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📚</div>
+              <h3 style={{
+                fontSize: '20px',
+                fontWeight: '500',
+                color: '#1f2937',
+                marginBottom: '8px'
+              }}>
                 {searchTerm ? 'No content found' : 'No content available yet'}
               </h3>
-              <p className="text-gray-600">
+              <p style={{ color: '#6b7280' }}>
                 {searchTerm
                   ? 'Try adjusting your search terms'
                   : 'Your teacher will upload learning materials soon!'
@@ -123,38 +157,76 @@ function StudentPanel({ user, onLogout }) {
             </div>
           ) : (
             filteredContent.map((item) => (
-              <div key={item.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+              <div key={item.id} style={{
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                transition: 'box-shadow 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
+              onMouseLeave={(e) => e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'}
+              >
+                <div style={{ padding: '24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontWeight: '600',
+                      color: '#1f2937',
+                      flex: 1,
+                      marginRight: '8px'
+                    }}>
                       {item.title}
                     </h3>
                     {item.file_url && (
-                      <div className="flex-shrink-0 ml-2">
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          📎 File
-                        </span>
-                      </div>
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '2px 8px',
+                        borderRadius: '9999px',
+                        fontSize: '12px',
+                        fontWeight: '500',
+                        backgroundColor: '#dbeafe',
+                        color: '#1e40af'
+                      }}>
+                        📎 File
+                      </span>
                     )}
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p style={{
+                    color: '#6b7280',
+                    fontSize: '14px',
+                    marginBottom: '16px',
+                    lineHeight: '1.5'
+                  }}>
                     {item.description}
                   </p>
 
-                  <div className="space-y-3">
+                  <div style={{ marginBottom: '12px' }}>
                     {item.file_url && (
-                      <div className="bg-gray-50 p-3 rounded-md">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-600">📎</span>
-                            <span className="text-sm font-medium text-gray-900">
+                      <div style={{
+                        backgroundColor: '#f9fafb',
+                        padding: '12px',
+                        borderRadius: '6px'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ fontSize: '14px', color: '#6b7280' }}>📎</span>
+                            <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>
                               {item.file_name || 'Download File'}
                             </span>
                           </div>
                           <button
                             onClick={() => handleDownload(item.file_url, item.file_name)}
-                            className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                            style={{
+                              color: '#6366f1',
+                              fontSize: '14px',
+                              fontWeight: '500',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer'
+                            }}
                           >
                             Download
                           </button>
@@ -162,7 +234,14 @@ function StudentPanel({ user, onLogout }) {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '14px',
+                      color: '#6b7280',
+                      marginTop: '12px'
+                    }}>
                       <span>
                         By: {item.uploaded_by?.split('@')[0] || 'Teacher'}
                       </span>
@@ -178,9 +257,25 @@ function StudentPanel({ user, onLogout }) {
         </div>
 
         {/* Real-time indicator */}
-        <div className="mt-8 text-center">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+        <div style={{ marginTop: '32px', textAlign: 'center' }}>
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '4px 12px',
+            borderRadius: '9999px',
+            fontSize: '12px',
+            fontWeight: '500',
+            backgroundColor: '#dcfce7',
+            color: '#166534'
+          }}>
+            <span style={{
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#22c55e',
+              borderRadius: '50%',
+              marginRight: '8px',
+              animation: 'pulse 2s infinite'
+            }}></span>
             Live updates enabled
           </span>
         </div>
