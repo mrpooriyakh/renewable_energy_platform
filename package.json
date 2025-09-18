@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@botpress/webchat": "^3.2.6",
+    "@botpress/webchat": "^3.2.7",
     "@chakra-ui/alert": "^2.2.2",
     "@chakra-ui/react": "^3.27.0",
     "@emotion/react": "^11.14.0",

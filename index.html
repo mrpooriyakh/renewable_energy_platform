@@ -4,7 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Renewable Energy Learning Platform</title>
+
+    <!-- Botpress Webchat Scripts -->
+    <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js" defer></script>
+    <script src="https://files.bpcontent.cloud/2025/09/18/07/20250918072422-FPRLUKLO.js" defer></script>
+
+    <!-- Botpress Webchat Styling -->
+    <style>
+      #webchat .bpWebchat {
+        position: unset !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        max-width: 100% !important;
+        border-radius: 0 0 15px 15px !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      #webchat .bpFab {
+        display: none !important;
+      }
+
+      /* Hide the default header since we have our custom one */
+      #webchat .bpWebchat .bpHeader {
+        display: none !important;
+      }
+
+      /* Ensure the conversation area takes full height */
+      #webchat .bpWebchat .bpConversation {
+        height: 100% !important;
+        border-radius: 0 0 15px 15px !important;
+      }
+
+      /* Custom scrollbar for webchat */
+      #webchat .bpWebchat .bpConversation::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #webchat .bpWebchat .bpConversation::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      #webchat .bpWebchat .bpConversation::-webkit-scrollbar-thumb {
+        background: #22c55e;
+        border-radius: 3px;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

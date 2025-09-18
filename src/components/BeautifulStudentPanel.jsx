@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import RenewableEnergyBot from './RenewableEnergyBot'
 
 function BeautifulStudentPanel({ user, onLogout }) {
   const [selectedEnergyType, setSelectedEnergyType] = useState(null)
@@ -322,76 +323,6 @@ function BeautifulStudentPanel({ user, onLogout }) {
             ))}
           </div>
 
-          {/* AI Assistant Block */}
-          <div style={{ textAlign: 'center' }}>
-            <div
-              onClick={toggleChatbot}
-              style={{
-                background: aiAssistant.gradient,
-                borderRadius: '20px',
-                padding: '50px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.3)',
-                border: '3px solid rgba(255, 255, 255, 0.3)',
-                maxWidth: '600px',
-                margin: '0 auto',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-8px) scale(1.02)'
-                e.target.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.4)'
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0px) scale(1)'
-                e.target.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.3)'
-              }}
-            >
-              <div style={{
-                position: 'absolute',
-                top: '-50%',
-                left: '-50%',
-                width: '200%',
-                height: '200%',
-                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                animation: 'pulse 3s ease-in-out infinite'
-              }}></div>
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ fontSize: '100px', marginBottom: '25px' }}>
-                  {aiAssistant.emoji}
-                </div>
-                <h3 style={{
-                  fontSize: '36px',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  margin: '0 0 20px 0',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-                }}>
-                  {aiAssistant.name}
-                </h3>
-                <p style={{
-                  fontSize: '18px',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  margin: '0 0 15px 0',
-                  lineHeight: '1.6'
-                }}>
-                  {aiAssistant.description}
-                </p>
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '20px',
-                  padding: '8px 16px',
-                  display: 'inline-block',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  color: 'white'
-                }}>
-                  Coming Soon! ✨
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <style>{`
@@ -408,15 +339,11 @@ function BeautifulStudentPanel({ user, onLogout }) {
   if (!selectedCategory) {
     return (
         <div style={{
-          minHeight: '100vh',
           width: '100vw',
           background: energyTypes[selectedEnergyType].gradient,
         margin: 0,
         padding: 0,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        overflow: 'auto',
+        overflowX: 'hidden',
         ...customCursor
       }}>
         {/* Header */}
@@ -491,7 +418,8 @@ function BeautifulStudentPanel({ user, onLogout }) {
         <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '60px 20px'
+          padding: '60px 20px 200px 20px',
+          minHeight: '100vh'
         }}>
           <div style={{ textAlign: 'center', marginBottom: '50px' }}>
             <h2 style={{
@@ -548,41 +476,110 @@ function BeautifulStudentPanel({ user, onLogout }) {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* AI Chatbot placeholder */}
-        {showChatbot && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              zIndex: 1000,
-              background: 'rgba(34, 197, 94, 0.95)',
-              borderRadius: '15px',
-              padding: '20px',
-              color: 'white',
-              maxWidth: '300px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
-            }}
-          >
-            <h3>🤖 AI Assistant</h3>
-            <p>AI chatbot coming soon!</p>
-            <button
-              onClick={() => setShowChatbot(false)}
+          {/* Debug: Spacer to ensure scrolling works */}
+          <div style={{ height: '50px', background: 'rgba(255,255,255,0.1)', margin: '20px 0', textAlign: 'center', color: 'white', padding: '15px' }}>
+            🔄 Debug: If you can see this, scrolling is working! AI Assistant should be below.
+          </div>
+
+          {/* AI Assistant Block - MOVED HERE TO BE VISIBLE */}
+          <div style={{
+            textAlign: 'center',
+            marginTop: '60px',
+            background: 'rgba(255, 255, 0, 0.2)',
+            padding: '20px',
+            borderRadius: '15px',
+            border: '3px solid yellow'
+          }}>
+            <div
+              onClick={toggleChatbot}
               style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                cursor: 'pointer'
+                background: aiAssistant.gradient,
+                borderRadius: '20px',
+                padding: '50px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.3)',
+                border: '3px solid rgba(255, 255, 255, 0.3)',
+                maxWidth: '600px',
+                margin: '0 auto',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-8px) scale(1.02)'
+                e.target.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0px) scale(1)'
+                e.target.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.3)'
               }}
             >
-              Close
-            </button>
+              <div style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '-50%',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                animation: 'pulse 3s ease-in-out infinite'
+              }}></div>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '100px', marginBottom: '25px' }}>
+                  {aiAssistant.emoji}
+                </div>
+                <h3 style={{
+                  fontSize: '36px',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  margin: '0 0 20px 0',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                }}>
+                  {aiAssistant.name}
+                </h3>
+                <p style={{
+                  fontSize: '18px',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  margin: '0 0 15px 0',
+                  lineHeight: '1.6'
+                }}>
+                  {aiAssistant.description}
+                </p>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '20px',
+                  padding: '8px 16px',
+                  display: 'inline-block',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  🔴 CLICK ME TO TEST CHATBOT! 🔴
+                </div>
+                <div style={{
+                  background: 'red',
+                  color: 'white',
+                  padding: '10px',
+                  marginTop: '10px',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  fontWeight: 'bold'
+                }}>
+                  🚨 AI ASSISTANT IS HERE! 🚨
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+
+          {/* Extra bottom space to ensure visibility */}
+          <div style={{ height: '100px' }}></div>
+        </div>
+
+        {/* Renewable Energy AI Chatbot */}
+        <RenewableEnergyBot
+          showBot={showChatbot}
+          onClose={() => setShowChatbot(false)}
+        />
       </div>
     )
   }
@@ -705,7 +702,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
               border: '1px solid rgba(255, 255, 255, 0.2)'
             }}>
               <div style={{ fontSize: '80px', marginBottom: '20px' }}>
-                {category.emoji}
+                {contentCategories[selectedCategory].emoji}
               </div>
               <h3 style={{
                 fontSize: '28px',
@@ -836,39 +833,11 @@ function BeautifulStudentPanel({ user, onLogout }) {
         </div>
       </div>
 
-        {/* AI Chatbot placeholder */}
-        {showChatbot && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              zIndex: 1000,
-              background: 'rgba(34, 197, 94, 0.95)',
-              borderRadius: '15px',
-              padding: '20px',
-              color: 'white',
-              maxWidth: '300px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
-            }}
-          >
-            <h3>🤖 AI Assistant</h3>
-            <p>AI chatbot coming soon!</p>
-            <button
-              onClick={() => setShowChatbot(false)}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}
-            >
-              Close
-            </button>
-          </div>
-        )}
+        {/* Renewable Energy AI Chatbot */}
+        <RenewableEnergyBot
+          showBot={showChatbot}
+          onClose={() => setShowChatbot(false)}
+        />
       </div>
     )
 }
