@@ -7,6 +7,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
   const [content, setContent] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [showChatbot, setShowChatbot] = useState(false)
 
   useEffect(() => {
     fetchContent()
@@ -102,6 +103,10 @@ function BeautifulStudentPanel({ user, onLogout }) {
     description: 'Your smart learning companion'
   }
 
+  const toggleChatbot = () => {
+    setShowChatbot((prevState) => !prevState)
+  }
+
   const getFilteredContent = () => {
     if (!selectedEnergyType || !selectedCategory) return []
 
@@ -158,18 +163,18 @@ function BeautifulStudentPanel({ user, onLogout }) {
   // Main Dashboard View
   if (!selectedEnergyType) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        width: '100vw',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        margin: 0,
-        padding: 0,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        overflow: 'auto',
-        ...customCursor
-      }}>
+        <div style={{
+          minHeight: '100vh',
+          width: '100vw',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          margin: 0,
+          padding: 0,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          overflow: 'auto',
+          ...customCursor
+        }}>
         {/* Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.1)',
@@ -320,7 +325,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
           {/* AI Assistant Block */}
           <div style={{ textAlign: 'center' }}>
             <div
-              onClick={() => alert('AI Assistant coming soon! 🤖✨')}
+              onClick={toggleChatbot}
               style={{
                 background: aiAssistant.gradient,
                 borderRadius: '20px',
@@ -401,13 +406,11 @@ function BeautifulStudentPanel({ user, onLogout }) {
 
   // Category Selection View
   if (!selectedCategory) {
-    const energyType = energyTypes[selectedEnergyType]
-
     return (
-      <div style={{
-        minHeight: '100vh',
-        width: '100vw',
-        background: energyType.gradient,
+        <div style={{
+          minHeight: '100vh',
+          width: '100vw',
+          background: energyTypes[selectedEnergyType].gradient,
         margin: 0,
         padding: 0,
         position: 'fixed',
@@ -454,14 +457,14 @@ function BeautifulStudentPanel({ user, onLogout }) {
                   margin: 0,
                   textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
                 }}>
-                  {energyType.emoji} {energyType.name}
+                  {energyTypes[selectedEnergyType].emoji} {energyTypes[selectedEnergyType].name}
                 </h1>
                 <p style={{
                   color: 'rgba(255, 255, 255, 0.9)',
                   margin: '5px 0 0 0',
                   fontSize: '16px'
                 }}>
-                  {energyType.description}
+                  {energyTypes[selectedEnergyType].description}
                 </p>
               </div>
             </div>
@@ -546,20 +549,50 @@ function BeautifulStudentPanel({ user, onLogout }) {
             ))}
           </div>
         </div>
+
+        {/* AI Chatbot placeholder */}
+        {showChatbot && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              right: '20px',
+              zIndex: 1000,
+              background: 'rgba(34, 197, 94, 0.95)',
+              borderRadius: '15px',
+              padding: '20px',
+              color: 'white',
+              maxWidth: '300px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+            }}
+          >
+            <h3>🤖 AI Assistant</h3>
+            <p>AI chatbot coming soon!</p>
+            <button
+              onClick={() => setShowChatbot(false)}
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                border: 'none',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              Close
+            </button>
+          </div>
+        )}
       </div>
     )
   }
 
   // Content List View
-  const energyType = energyTypes[selectedEnergyType]
-  const category = contentCategories[selectedCategory]
-  const filteredContent = getFilteredContent()
-
   return (
-    <div style={{
-      minHeight: '100vh',
-      width: '100vw',
-      background: `linear-gradient(135deg, ${energyType.color}dd, ${category.color}dd)`,
+      <div style={{
+        minHeight: '100vh',
+        width: '100vw',
+        background: `linear-gradient(135deg, ${energyTypes[selectedEnergyType].color}dd, ${contentCategories[selectedCategory].color}dd)`,
       margin: 0,
       padding: 0,
       position: 'fixed',
@@ -606,7 +639,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
                 margin: 0,
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
               }}>
-                {energyType.emoji} {energyType.name} - {category.emoji} {category.name}
+                {energyTypes[selectedEnergyType].emoji} {energyTypes[selectedEnergyType].name} - {contentCategories[selectedCategory].emoji} {contentCategories[selectedCategory].name}
               </h1>
             </div>
           </div>
@@ -638,7 +671,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
         <div style={{ marginBottom: '30px' }}>
           <input
             type="text"
-            placeholder={`🔍 Search ${category.name.toLowerCase()}...`}
+            placeholder={`🔍 Search ${contentCategories[selectedCategory].name.toLowerCase()}...`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
@@ -661,7 +694,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
           gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
           gap: '25px'
         }}>
-          {filteredContent.length === 0 ? (
+          {getFilteredContent().length === 0 ? (
             <div style={{
               gridColumn: '1 / -1',
               textAlign: 'center',
@@ -681,17 +714,17 @@ function BeautifulStudentPanel({ user, onLogout }) {
                 marginBottom: '15px',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
               }}>
-                No {category.name.toLowerCase()} found
+                No {contentCategories[selectedCategory].name.toLowerCase()} found
               </h3>
               <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '18px' }}>
                 {searchTerm
                   ? 'Try adjusting your search terms'
-                  : `No ${category.name.toLowerCase()} available for ${energyType.name.toLowerCase()} yet`
+                  : `No ${contentCategories[selectedCategory].name.toLowerCase()} available for ${energyTypes[selectedEnergyType].name.toLowerCase()} yet`
                 }
               </p>
             </div>
           ) : (
-            filteredContent.map((item) => (
+            getFilteredContent().map((item) => (
               <div key={item.id} style={{
                 background: 'rgba(255, 255, 255, 0.9)',
                 borderRadius: '15px',
@@ -710,12 +743,12 @@ function BeautifulStudentPanel({ user, onLogout }) {
               }}
               >
                 <div style={{
-                  background: category.gradient,
+                  background: contentCategories[selectedCategory].gradient,
                   padding: '20px',
                   textAlign: 'center'
                 }}>
                   <div style={{ fontSize: '40px', color: 'white' }}>
-                    {category.emoji}
+                    {contentCategories[selectedCategory].emoji}
                   </div>
                 </div>
 
@@ -764,7 +797,7 @@ function BeautifulStudentPanel({ user, onLogout }) {
                             document.body.removeChild(link)
                           }}
                           style={{
-                            background: category.gradient,
+                            background: contentCategories[selectedCategory].gradient,
                             color: 'white',
                             border: 'none',
                             borderRadius: '8px',
@@ -802,8 +835,42 @@ function BeautifulStudentPanel({ user, onLogout }) {
           )}
         </div>
       </div>
-    </div>
-  )
+
+        {/* AI Chatbot placeholder */}
+        {showChatbot && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              right: '20px',
+              zIndex: 1000,
+              background: 'rgba(34, 197, 94, 0.95)',
+              borderRadius: '15px',
+              padding: '20px',
+              color: 'white',
+              maxWidth: '300px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+            }}
+          >
+            <h3>🤖 AI Assistant</h3>
+            <p>AI chatbot coming soon!</p>
+            <button
+              onClick={() => setShowChatbot(false)}
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                border: 'none',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              Close
+            </button>
+          </div>
+        )}
+      </div>
+    )
 }
 
 export default BeautifulStudentPanel

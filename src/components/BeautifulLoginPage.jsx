@@ -27,6 +27,7 @@ function BeautifulLoginPage({ onLogin }) {
   return (
     <div style={{
       minHeight: '100vh',
+      width: '100vw',
       backgroundImage: 'url("/background1.jpg")',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -34,8 +35,17 @@ function BeautifulLoginPage({ onLogin }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '20px',
-      position: 'relative',
+      padding: '15px',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      margin: 0,
+      overflow: 'hidden',
+      overflowY: 'auto',
+      boxSizing: 'border-box',
+      zIndex: 1000,
       ...customCursor
     }}>
       {/* Elegant overlay for better readability */}
@@ -51,36 +61,50 @@ function BeautifulLoginPage({ onLogin }) {
 
       {/* Main login card with classic design */}
       <div style={{
-        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))',
+        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95))',
         borderRadius: '20px',
-        padding: '60px 50px',
-        maxWidth: '480px',
-        width: '100%',
+        padding: '30px 35px',
+        maxWidth: '400px',
+        width: '85%',
+        minHeight: 'auto',
         boxShadow: `
           0 25px 50px rgba(0, 0, 0, 0.25),
-          0 0 0 1px rgba(255, 255, 255, 0.05),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          0 0 0 1px rgba(255, 255, 255, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 1),
           inset 0 -1px 0 rgba(0, 0, 0, 0.05)
         `,
-        border: '1px solid rgba(255, 255, 255, 0.2)',
+        border: '2px solid rgba(255, 255, 255, 0.3)',
         position: 'relative',
-        zIndex: 10
+        zIndex: 10,
+        backdropFilter: 'blur(20px)',
+        transform: 'translateY(0)',
+        transition: 'all 0.3s ease',
+        margin: '10px'
       }}>
         {/* Elegant header */}
-        <div style={{ textAlign: 'center', marginBottom: '45px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '25px', padding: '5px' }}>
           <div style={{
             width: '80px',
             height: '80px',
             background: 'linear-gradient(135deg, #22c55e, #16a34a)',
             borderRadius: '50%',
-            margin: '0 auto 25px auto',
+            margin: '0 auto 15px auto',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 10px 25px rgba(34, 197, 94, 0.3)',
-            border: '3px solid rgba(255, 255, 255, 0.8)'
+            boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4)',
+            border: '3px solid rgba(255, 255, 255, 0.9)',
+            position: 'relative',
+            overflow: 'visible',
+            flexShrink: 0
           }}>
-            <span style={{ fontSize: '36px', color: 'white' }}>🌱</span>
+            <span style={{
+              fontSize: '36px',
+              color: 'white',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 2,
+              lineHeight: 1
+            }}>🌱</span>
           </div>
 
           <h1 style={{
@@ -131,7 +155,7 @@ function BeautifulLoginPage({ onLogin }) {
 
         {/* Elegant login form */}
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '24px' }}>
+          <div style={{ marginBottom: '20px' }}>
             <label style={{
               display: 'block',
               marginBottom: '8px',
@@ -173,7 +197,7 @@ function BeautifulLoginPage({ onLogin }) {
             />
           </div>
 
-          <div style={{ marginBottom: '32px' }}>
+          <div style={{ marginBottom: '20px' }}>
             <label style={{
               display: 'block',
               marginBottom: '8px',
@@ -266,15 +290,15 @@ function BeautifulLoginPage({ onLogin }) {
         {/* Demo credentials with elegant styling */}
         <div style={{
           background: 'linear-gradient(135deg, #f8fafc, #f1f5f9)',
-          padding: '24px',
+          padding: '20px',
           borderRadius: '16px',
-          marginTop: '32px',
+          marginTop: '24px',
           border: '1px solid #e2e8f0'
         }}>
           <h3 style={{
             fontSize: '15px',
             fontWeight: '700',
-            marginBottom: '16px',
+            marginBottom: '12px',
             textAlign: 'center',
             color: '#374151',
             letterSpacing: '0.025em'
@@ -286,8 +310,8 @@ function BeautifulLoginPage({ onLogin }) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '12px',
-              padding: '12px 16px',
+              marginBottom: '10px',
+              padding: '10px 14px',
               background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.05))',
               borderRadius: '10px',
               border: '1px solid rgba(59, 130, 246, 0.1)'
@@ -306,7 +330,7 @@ function BeautifulLoginPage({ onLogin }) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              padding: '12px 16px',
+              padding: '10px 14px',
               background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.05))',
               borderRadius: '10px',
               border: '1px solid rgba(16, 185, 129, 0.1)'
@@ -324,64 +348,6 @@ function BeautifulLoginPage({ onLogin }) {
           </div>
         </div>
 
-        {/* Energy types preview with elegant design */}
-        <div style={{ textAlign: 'center', marginTop: '28px' }}>
-          <p style={{
-            fontSize: '13px',
-            color: '#6b7280',
-            marginBottom: '16px',
-            fontWeight: '600',
-            letterSpacing: '0.025em'
-          }}>
-            Explore renewable energy topics
-          </p>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '16px',
-            flexWrap: 'wrap'
-          }}>
-            {[
-              { emoji: '☀️', name: 'Solar', color: '#f59e0b' },
-              { emoji: '💧', name: 'Hydro', color: '#3b82f6' },
-              { emoji: '🔥', name: 'Geothermal', color: '#ef4444' },
-              { emoji: '💨', name: 'Wind', color: '#10b981' }
-            ].map((energy) => (
-              <div
-                key={energy.name}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px',
-                  borderRadius: '10px',
-                  background: `linear-gradient(135deg, ${energy.color}15, ${energy.color}08)`,
-                  border: `1px solid ${energy.color}20`,
-                  minWidth: '60px'
-                }}
-              >
-                <div style={{
-                  fontSize: '24px',
-                  padding: '6px',
-                  borderRadius: '8px',
-                  background: `${energy.color}10`,
-                  border: `1px solid ${energy.color}20`
-                }}>
-                  {energy.emoji}
-                </div>
-                <span style={{
-                  fontSize: '11px',
-                  color: energy.color,
-                  fontWeight: '600',
-                  letterSpacing: '0.025em'
-                }}>
-                  {energy.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Subtle animations */}
@@ -389,6 +355,15 @@ function BeautifulLoginPage({ onLogin }) {
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+          50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+          100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
       `}</style>
     </div>

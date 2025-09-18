@@ -9,6 +9,7 @@ function BeautifulAdminPanel({ user, onLogout }) {
   const [file, setFile] = useState(null)
   const [externalUrl, setExternalUrl] = useState('')
   const [loading, setLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [uploads, setUploads] = useState([])
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('success')
@@ -182,14 +183,18 @@ function BeautifulAdminPanel({ user, onLogout }) {
         background: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         padding: '20px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
         <div style={{
           maxWidth: '1600px',
           margin: '0 auto',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <div>
             <h1 style={{
@@ -243,7 +248,11 @@ function BeautifulAdminPanel({ user, onLogout }) {
       <div style={{
         maxWidth: '1600px',
         margin: '0 auto',
-        padding: '40px 20px'
+        padding: '30px 15px 50px 15px',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: 'calc(100vh - 120px)',
+        overflowY: 'auto'
       }}>
         <div style={{
           display: 'grid',
@@ -255,9 +264,13 @@ function BeautifulAdminPanel({ user, onLogout }) {
           <div style={{
             background: 'rgba(255, 255, 255, 0.95)',
             borderRadius: '20px',
-            padding: '40px',
+            padding: '30px',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column'
           }}>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               <div style={{ fontSize: '64px', marginBottom: '15px' }}>📤</div>
@@ -290,8 +303,18 @@ function BeautifulAdminPanel({ user, onLogout }) {
               </div>
             )}
 
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: '25px' }}>
+            <form onSubmit={handleSubmit} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              minHeight: 0
+            }}>
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                paddingRight: '5px'
+              }}>
+                <div style={{ marginBottom: '25px' }}>
                 <label style={{
                   display: 'block',
                   marginBottom: '10px',
@@ -560,22 +583,25 @@ function BeautifulAdminPanel({ user, onLogout }) {
                   )}
                 </div>
               </div>
+              </div>
 
               <button
                 type="submit"
                 disabled={loading}
                 style={{
                   width: '100%',
-                  padding: '18px',
+                  padding: '16px',
                   background: loading ? '#9ca3af' : 'linear-gradient(135deg, #667eea, #764ba2)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '15px',
-                  fontSize: '18px',
+                  borderRadius: '12px',
+                  fontSize: '16px',
                   fontWeight: 'bold',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.3s ease',
-                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)'
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                  marginTop: '10px',
+                  flexShrink: 0
                 }}
                 onMouseEnter={(e) => {
                   if (!loading) {
@@ -765,8 +791,8 @@ function BeautifulAdminPanel({ user, onLogout }) {
               </div>
             ) : (
               uploads.slice(0, 12).map((upload) => {
-                const energyType = energyTypes[upload.energy_type || 'solar']
-                const category = contentCategories[upload.content_category || 'textbooks']
+                const energyType = energyTypes[upload.energy_type || 'solar'] || energyTypes['solar']
+                const category = contentCategories[upload.content_category || 'textbooks'] || contentCategories['textbooks']
 
                 return (
                   <div key={upload.id} style={{
